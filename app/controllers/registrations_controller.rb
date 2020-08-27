@@ -9,19 +9,18 @@ class RegistrationsController < ApplicationController
                 logged_in: true,
                 status: :created
             }
-        else {
+        else 
             render json: {
                 status: 401,
                 message: "Something went wrong"
             }
-        }
         end
     end
 
     private
 
     def user_params 
-        params.require(:user).permit(:username, :email, :password, :image)
+        params.permit(:username, :email, :password, :image)
     end
 
 end
