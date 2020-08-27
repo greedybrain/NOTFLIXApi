@@ -1,12 +1,13 @@
-class Api::V1::SessionsController < ApplicationController
+class SessionsController < ApplicationController
 
     def login
-        user = User.find_by(email: [:email])
-        if user&.authenticate(:password) 
+        user = User.find_by(email: params[:email])
+        if user&.authenticate(params[:password]) 
             session[:user_id] = user.id
             render json: {
                 user: UserSerializer.new(user).serializable_hash,
                 logged_in: true,
+                message: "You're logged in",
                 status: :created
             }
         else
@@ -29,7 +30,7 @@ class Api::V1::SessionsController < ApplicationController
         session.clear
         render json: {
             status: 200,
-            logged_in: false
+            logged_in: false,
             logged_out: true
         }
     end
