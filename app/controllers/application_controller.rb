@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-    helper_method :current_user
+    protect_from_forgery
 
     def current_user 
         if session[:user_id]
