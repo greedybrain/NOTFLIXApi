@@ -4,10 +4,14 @@ Rails.application.routes.draw do
       resources :users do 
         resources :nomination_lists
       end
-
-      get '/logged_in', to: 'sessions#logged_in'
-      post '/login', to: 'sessions#login'
-      delete '/logout', to: 'sessions#logout'
     end
   end
+
+  #SIGNUP
+  post '/signup', to: 'registrations#signup'
+
+  # LOGGED IN?/LOGIN/LOGOUT 
+  get '/logged_in', to: 'sessions#logged_in'
+  post '/login', to: 'sessions#login'
+  delete '/logout', to: 'sessions#logout'
 end
