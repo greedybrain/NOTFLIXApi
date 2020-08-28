@@ -17,14 +17,19 @@ class SessionsController < ApplicationController
         end
     end
 
-    def logged_in
-        if current_user 
-            render json: {
-                logged_in: true,
-                user: current_user
-            }
-        end
-    end
+    # NEEDS FIXING
+    # def logged_in
+    #     if @current_user
+    #         render json: {
+    #             logged_in: true,
+    #             user: @current_user
+    #         }
+    #     else
+    #         render json: {
+    #             logged_in: false
+    #         }
+    #     end
+    # end
 
     def logout 
         session.clear
@@ -33,12 +38,6 @@ class SessionsController < ApplicationController
             logged_in: false,
             logged_out: true
         }
-    end
-
-    private 
-
-    def user_params 
-        params.permit(:user).require(:username, :email, )
     end
 
 end
