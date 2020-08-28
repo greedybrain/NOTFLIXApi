@@ -1,9 +1,8 @@
 class User < ApplicationRecord
     has_secure_password
 
-    # Username must be present and unique
-    # Email must be present and unique
-    # Password must contain 8 or more characters
+    validates :username, :email, presence: true, uniqueness: true 
+    validates :password, length: { minimum: 8 }
     # Image is optional
 
     has_many :movies, dependent: :destroy
