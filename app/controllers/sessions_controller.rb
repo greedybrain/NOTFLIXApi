@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
 
     def login
+        # HANDLES LOGGING IN USER 
         user = User.find_by(email: params[:email])
         if user&.authenticate(params[:password]) 
             session[:user_id] = user.id
@@ -32,6 +33,7 @@ class SessionsController < ApplicationController
     # end
 
     def logout 
+        # HANDLE LOGGING USER OUT 
         session.clear
         render json: {
             status: 200,

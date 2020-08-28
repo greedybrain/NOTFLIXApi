@@ -1,6 +1,7 @@
 class RegistrationsController < ApplicationController
 
     def signup 
+        # HANDLES SIGNING USER UP 
         user = User.new(user_params)
         if user.save 
             session[:user_id] = user.id
