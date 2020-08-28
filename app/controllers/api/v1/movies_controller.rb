@@ -10,12 +10,18 @@ class Api::V1::MoviesController < ApplicationController
     def create 
         if params[:user_id]
             user = User.find(params[:user_id])
-            movie = user.movies.build(movie_params)
-            if movie.save 
+            if user&.movies.length >= 5
                 render json: {
-                    movie: MovieSerializer.new(movie),
-                    message: "Movie nominated successfully",
+                    message: "You can only nominate 5 movies"
                 }
+            else
+                movie = user.movies.build(movie_params)
+                if movie.save 
+                    render json: {
+                        movie: MovieSerializer.new(movie),
+                        message: "Movie nominated successfully",
+                    }
+                end
             end
         end
     end
