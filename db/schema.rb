@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_27_032222) do
+ActiveRecord::Schema.define(version: 2020_08_29_030526) do
 
   create_table "movies", force: :cascade do |t|
     t.string "title"
@@ -20,6 +20,13 @@ ActiveRecord::Schema.define(version: 2020_08_27_032222) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "actors"
+    t.string "genre"
+    t.string "language"
+    t.string "country"
+    t.string "runtime"
+    t.string "imdb_rating"
+    t.string "production"
     t.index ["user_id"], name: "index_movies_on_user_id"
   end
 
