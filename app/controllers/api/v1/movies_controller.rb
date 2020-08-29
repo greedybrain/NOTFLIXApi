@@ -8,6 +8,19 @@ class Api::V1::MoviesController < ApplicationController
         }
     end
 
+    def add_result 
+        movie = Movie.find_or_create_by(title: params[:title]) do |mov|
+            mov.actors = params[:actors]
+            mov.genre = params[:genre]
+            mov.language = params[:language]
+            mov.country = params[:country]
+            mov.runtime = params[:runtime]
+            mov.release_year = params[:release_year]
+            mov.imdb_rating = params[:imdb_rating]
+            mov.production = params[:production]
+        end
+    end
+
     def create 
         # HANDLING ADDING A MOVIE TO A USERS NOMINATIONS
         if params[:user_id]
@@ -51,6 +64,10 @@ class Api::V1::MoviesController < ApplicationController
     def movie_params
         # SHOWS PERMITTED PARAMS FOR A MOVIE 
         params.permit(:title, :release_year, :plot, :poster)
+    end
+
+    def movie_result_params 
+        params.permit(:title, :actors, :genre, :language, :country, :runtime, :release_year, :imdb_rating, :production)
     end
 
 end
