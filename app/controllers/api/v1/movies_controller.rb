@@ -8,8 +8,8 @@ class Api::V1::MoviesController < ApplicationController
         }
     end
 
-    def add_result 
-        movie = Movie.find_or_create_by(title: params[:title]) do |mov|
+    def create 
+        Movie.find_or_create_by(title: params[:title]) do |mov|
             mov.actors = params[:actors]
             mov.genre = params[:genre]
             mov.language = params[:language]
@@ -19,18 +19,16 @@ class Api::V1::MoviesController < ApplicationController
             mov.imdb_rating = params[:imdb_rating]
             mov.production = params[:production]
         end
-    end
-
-    def create 
         # HANDLING ADDING A MOVIE TO A USERS NOMINATIONS
         if params[:user_id]
             user = User.find(params[:user_id])
             if user&.movies.length >= 5
                 render json: {
+                    user_movies: MovieSerializer.new(user.movies).serializable_hash,
                     message: "You can only nominate 5 movies"
                 }
             else
-                movie = user.movies.build(movie_params)
+                movie = user.movies.build(movie_result_params)
                 if movie.save 
                     render json: {
                         movie: MovieSerializer.new(movie),
@@ -60,11 +58,6 @@ class Api::V1::MoviesController < ApplicationController
     # Users can review nomination list
 
     private 
-
-    def movie_params
-        # SHOWS PERMITTED PARAMS FOR A MOVIE 
-        params.permit(:title, :release_year, :plot, :poster)
-    end
 
     def movie_result_params 
         params.permit(:title, :actors, :genre, :language, :country, :runtime, :release_year, :imdb_rating, :production)
