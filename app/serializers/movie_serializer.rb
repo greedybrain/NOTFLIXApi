@@ -1,11 +1,5 @@
 class MovieSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :title, :release_year, :plot, :poster
+  attributes :title, :actors, :genre, :language, :country, :runtime, :plot, :poster,  :release_year, :imdb_rating, :production
 
-  attribute :user do |movie|
-    {
-      id: movie.user.id,
-      username: movie.user.username
-    }
-  end
 end
