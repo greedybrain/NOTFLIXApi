@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       end
 
       resources :movies, only: [:index]
+      post '/add_movie_home', to: "movies#add_movie_to_home"
     end
   end
   
