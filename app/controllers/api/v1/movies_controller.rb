@@ -2,23 +2,38 @@ class Api::V1::MoviesController < ApplicationController
 
     def index 
         # GET ALL MOVIES ORDERED FROM MOST RECENT TO OLDEST
-        movies = Movie.order('created_at')
+        movies = Movie.order('created_at DESC')
         render json: {
             movies: MovieSerializer.new(movies)
         }
     end
 
-    def create 
-        Movie.find_or_create_by(title: params[:title]) do |mov|
-            mov.actors = params[:actors]
-            mov.genre = params[:genre]
-            mov.language = params[:language]
-            mov.country = params[:country]
-            mov.runtime = params[:runtime]
-            mov.release_year = params[:release_year]
-            mov.imdb_rating = params[:imdb_rating]
-            mov.production = params[:production]
+    def add_movie_to_home 
+        movie = Movie.find_or_create_by(plot: params[:plot]) do |movie|
+            movie.title = params[:title]
+            movie.actors = params[:actors]
+            movie.genre = params[:genre]
+            movie.language = params[:language]
+            movie.country = params[:country]
+            movie.runtime = params[:runtime]
+            movie.release_year = params[:release_year]
+            movie.poster = params[:poster]
+            movie.imdb_rating = params[:imdb_rating]
+            movie.production = params[:production]
         end
+        if movie.save
+            render json: {
+                movie: MovieSerializer.new(movie).serializable_hash
+            } 
+        else
+            render json: {
+                status: 204,
+                message: "We couldn't find that movie"
+            } 
+        end
+    end
+
+    def create 
         # HANDLING ADDING A MOVIE TO A USERS NOMINATIONS
         if params[:user_id]
             user = User.find(params[:user_id])
@@ -60,7 +75,7 @@ class Api::V1::MoviesController < ApplicationController
     private 
 
     def movie_result_params 
-        params.permit(:title, :actors, :genre, :language, :country, :runtime, :release_year, :imdb_rating, :production)
+        params.permit(:title, :actors, :genre, :language, :country, :runtime, :plot, :poster,  :release_year, :imdb_rating, :production)
     end
 
 end
