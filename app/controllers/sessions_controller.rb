@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+    # before_action :current_user, only: [:logged_in]
 
     def login
         # HANDLES LOGGING IN USER 
@@ -19,18 +20,24 @@ class SessionsController < ApplicationController
     end
 
     # NEEDS FIXING
-    # def logged_in
-    #     if @current_user
-    #         render json: {
-    #             logged_in: true,
-    #             user: @current_user
-    #         }
-    #     else
-    #         render json: {
-    #             logged_in: false
-    #         }
-    #     end
-    # end
+    def logged_in
+        if @current_user
+            render json: {
+                logged_in: true,
+                user: {
+                    id: @current_user.id,
+                    username: @current_user.username,
+                    email: @current_user.email,
+                    image: @current_user.image,
+                    movies: @current_user.movies
+                }
+            }
+        else
+            render json: {
+                logged_in: false
+            }
+        end
+    end
 
     def logout 
         # HANDLE LOGGING USER OUT 
