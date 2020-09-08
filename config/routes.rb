@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         resources :movies, only: [:index, :create, :destroy]
       end
 
-      resources :movies, only: [:index]
+      resources :movies, only: [:index, :show]
       post '/add_movie_home', to: "movies#add_movie_to_home"
     end
   end
@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   post '/signup', to: 'registrations#signup'
 
   # LOGGED IN?/LOGIN/LOGOUT 
+  resources :sessions, only: [:create]
+  resources :registrations, only: [:create]
   get '/logged_in', to: 'sessions#logged_in'
-  post '/login', to: 'sessions#login'
   delete '/logout', to: 'sessions#logout'
 end
