@@ -1,5 +1,5 @@
 {
-  "name": "fake_flix_api",
+  "name": "notflixx_api",
   "private": true,
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
