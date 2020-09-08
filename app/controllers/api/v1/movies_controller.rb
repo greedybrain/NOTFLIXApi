@@ -2,10 +2,18 @@ class Api::V1::MoviesController < ApplicationController
 
     def index 
         # GET ALL MOVIES ORDERED FROM MOST RECENT TO OLDEST
-        movies = Movie.order('created_at DESC')
-        render json: {
-            movies: MovieSerializer.new(movies)
-        }
+        if params[:user_id]
+            user = User.find(params[:user_id])
+            movies = user.movies.order('created_at DESC')
+            render json: {
+                movies: MovieSerializer.new(movies)
+            }
+        else
+            movies = Movie.order('created_at DESC')
+            render json: {
+                movies: MovieSerializer.new(movies)
+            }
+        end
     end
 
     def add_movie_to_home 
@@ -37,14 +45,15 @@ class Api::V1::MoviesController < ApplicationController
         # HANDLING ADDING A MOVIE TO A USERS NOMINATIONS
         if params[:user_id]
             user = User.find(params[:user_id])
-            if user&.movies.length >= 5
+            if user.movie_limit_reached?
                 render json: {
                     user_movies: MovieSerializer.new(user.movies).serializable_hash,
-                    message: "You can only nominate 5 movies"
+                    warning: "You can only nominate 5 movies"
                 }
             else
-                movie = user.movies.build(movie_result_params)
-                if movie.save 
+                movie = Movie.find_by(plot: params[:plot])
+                if movie
+                    user.movies << movie
                     render json: {
                         movie: MovieSerializer.new(movie),
                         message: "Movie nominated successfully",
@@ -75,7 +84,7 @@ class Api::V1::MoviesController < ApplicationController
     private 
 
     def movie_result_params 
-        params.permit(:title, :actors, :genre, :language, :country, :runtime, :plot, :poster,  :release_year, :imdb_rating, :production)
+        params.permit(:title, :actors, :genre, :language, :country, :runtime, :plot, :poster,  :release_year, :imdb_rating, :production, :user_id)
     end
 
 end
