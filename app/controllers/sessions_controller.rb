@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
-    # before_action :current_user, only: [:logged_in]
+    before_action :set_current_user, except: [:create]
 
-    def login
+    def create
         # HANDLES LOGGING IN USER 
         user = User.find_by(email: params[:email])
         if user&.authenticate(params[:password]) 
@@ -44,7 +44,6 @@ class SessionsController < ApplicationController
         session.clear
         render json: {
             status: 200,
-            logged_in: false,
             logged_out: true
         }
     end
