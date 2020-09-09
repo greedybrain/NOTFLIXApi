@@ -54,6 +54,7 @@ class Api::V1::MoviesController < ApplicationController
                 movie = Movie.find_by(plot: params[:plot])
                 if movie
                     user.movies << movie
+                    movie.movie_users << user
                     render json: {
                         movie: MovieSerializer.new(movie),
                         message: "Movie nominated successfully",
@@ -67,7 +68,9 @@ class Api::V1::MoviesController < ApplicationController
         if params[:user_id]
             user = User.find(params[:user_id])
             movie = user.movies.find(params[:id])
-            if movie.destroy
+            movie.movie_users.find(params[:user_id]).destroy
+            # binding.pry
+            if movie.save
                 render json: {
                     movie: MovieSerializer.new(movie).serializable_hash,
                     message: "Movie removed from nomination list"
