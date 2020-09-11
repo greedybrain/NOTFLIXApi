@@ -53,8 +53,7 @@ class Api::V1::MoviesController < ApplicationController
             else
                 movie = Movie.find_by(plot: params[:plot])
                 if movie
-                    user.movies << movie
-                    movie.movie_users << user
+                    user.movies << movie 
                     render json: {
                         movie: MovieSerializer.new(movie),
                         message: "Movie nominated successfully",
@@ -68,8 +67,6 @@ class Api::V1::MoviesController < ApplicationController
         if params[:user_id]
             user = User.find(params[:user_id])
             movie = user.movies.find(params[:id])
-            movie.movie_users.find(params[:user_id]).destroy
-            # binding.pry
             if movie.save
                 render json: {
                     movie: MovieSerializer.new(movie).serializable_hash,
