@@ -1,0 +1,2 @@
+class FavoritedMoviesController < ApplicationController
+end
