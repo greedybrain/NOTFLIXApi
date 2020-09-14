@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-    before_action :set_current_user, except: [:create]
 
     def create
         # HANDLES LOGGING IN USER 
@@ -21,16 +20,10 @@ class SessionsController < ApplicationController
 
     # NEEDS FIXING
     def logged_in
-        if @current_user
+        if current_user
             render json: {
                 logged_in: true,
-                user: {
-                    id: @current_user.id,
-                    username: @current_user.username,
-                    email: @current_user.email,
-                    image: @current_user.image,
-                    movies: @current_user.movies
-                }
+                user: UserSerializer.new(current_user)
             }
         else
             render json: {
