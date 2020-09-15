@@ -5,9 +5,8 @@ class User < ApplicationRecord
     validates :password, length: { minimum: 8 }
     # Image is optional
 
-    # has_many :movie_users, dependent: :destroy
-    has_many :movies, dependent: :destroy
-    belongs_to :movie, optional: true
+    has_many :favorited_movies, dependent: :destroy
+    has_many :movies, through: :favorited_movies
 
     def movie_limit_reached?
         self&.movies.length >= 5

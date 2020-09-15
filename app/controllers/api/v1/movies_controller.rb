@@ -53,7 +53,7 @@ class Api::V1::MoviesController < ApplicationController
             else
                 movie = Movie.find_by(plot: params[:plot])
                 if movie
-                    user.movies << movie 
+                    user.favorited_movies << movie.id
                     render json: {
                         movie: MovieSerializer.new(movie),
                         message: "Movie nominated successfully",
@@ -66,20 +66,15 @@ class Api::V1::MoviesController < ApplicationController
     def destroy 
         if params[:user_id]
             user = User.find(params[:user_id])
-            movie = user.movies.find(params[:id])
-            if movie.save
+            movie = user.favorited_movies.find_by(id: params[:movie_id])
+            binding.pry
+            if movie.destroy
                 render json: {
-                    movie: MovieSerializer.new(movie).serializable_hash,
                     message: "Movie removed from nomination list"
                 }
             end
         end
     end
-
-    # Users can search for movies
-    # Users can nominate movies 
-    # Users can delete movies from the nomination list
-    # Users can review nomination list
 
     private 
 

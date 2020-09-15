@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  resources :favorited_movies
   namespace :api do 
     namespace :v1 do
 
       resources :users do 
+        resources :favorited_movies, only: %i[index, create,]
         resources :movies, only: [:index, :create, :destroy]
       end
 
